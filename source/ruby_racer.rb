@@ -20,10 +20,21 @@ class RubyRacer
 
   # Returns the winner if there is one, +nil+ otherwise
   def winner
+    return "a" if @a_track[29] == "a"
+    return "b" if @b_track[29] == "b"
   end
 
   # Rolls the dice and advances +player+ accordingly
   def advance_player!(player)
+    current_track = @a_track if player = "a"
+    current_track = @b_track if player = "b"
+    spaces = rand(6)+1
+    old_space = current_track.index(player)
+    new_space = old_space + spaces
+    new_space = 29 if new_space > 29
+    swap(current_track, old_space, new_space)
+    @a_track = current_track if player = "a"
+    @b_track = current_track if player = "b"
   end
 
   # Prints the current game board
@@ -31,6 +42,13 @@ class RubyRacer
   # and you should use the "reputs" helper to print over
   # the previous board
   def print_board
+  end
+
+  private
+
+  # Helper method for advance_player!
+  def swap(track, a, b)
+    track[a], track[b] = track[b], track[a]
   end
 end
 
