@@ -4,12 +4,10 @@ class RubyRacer
   attr_reader :players, :length
 
   def initialize(players, length = 30)
-    @player_a = players[0]
-    @player_b = players[1]
     @a_track = Array.new(30)
-    @a_track[0] = @player_a
+    @a_track[0] = players[0]
     @b_track = Array.new(30)
-    @b_track[0] = @player_b
+    @b_track[0] = players[1]
   end
 
   # Returns +true+ if one of the players has reached
@@ -26,15 +24,15 @@ class RubyRacer
 
   # Rolls the dice and advances +player+ accordingly
   def advance_player!(player)
-    current_track = @a_track if player = "a"
-    current_track = @b_track if player = "b"
+    current_track = @a_track if player == "a"
+    current_track = @b_track if player == "b"
     spaces = rand(6)+1
     old_space = current_track.index(player)
     new_space = old_space + spaces
     new_space = 29 if new_space > 29
     current_track = swap(current_track, old_space, new_space)
-    @a_track.replace(current_track) if player = "a"
-    @b_track.replace(current_track) if player = "b"
+    @a_track.replace(current_track) if player == "a"
+    @b_track.replace(current_track) if player == "b"
   end
 
   # Prints the current game board
