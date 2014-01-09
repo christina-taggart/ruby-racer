@@ -4,35 +4,43 @@ class RubyRacer
   attr_reader :players, :length
 
   def initialize(players, length = 30)
-    @a_track = Array.new(30)
-    @a_track[0] = players[0]
-    @b_track = Array.new(30)
-    @b_track[0] = players[1]
+    @tracks = []
+    @finish_line = length-1
+    players.each_with_index do |player, index|
+      @tracks << Array.new(length)
+      @tracks[index][0] = player
+    end
   end
 
   # Returns +true+ if one of the players has reached
   # the finish line, +false+ otherwise
   def finished?
-    @a_track[29] == "a" || @b_track[29] == "b"
+    @tracks.each do |track|
+      if track[@finish_line] != nil
+        return true
+      end
+    end
+    false
   end
 
   # Returns the winner if there is one, +nil+ otherwise
   def winner
-    return "a" if @a_track[29] == "a"
-    return "b" if @b_track[29] == "b"
+    @tracks.each do |track|
+      return track[@finish_line] if track[@finish_line] != nil
+    end
   end
 
   # Rolls the dice and advances +player+ accordingly
   def advance_player!(player)
-    current_track = @a_track if player == "a"
-    current_track = @b_track if player == "b"
-    spaces = rand(6)+1
-    old_space = current_track.index(player)
-    new_space = old_space + spaces
-    new_space = 29 if new_space > 29
-    current_track = swap(current_track, old_space, new_space)
-    @a_track.replace(current_track) if player == "a"
-    @b_track.replace(current_track) if player == "b"
+    @tracks.each do |track|
+      if track.include?(player)
+        spaces = rand(6)+1
+        old_space = track.index(player)
+        new_space = old_space + spaces
+        new_space = @finish_line if new_space > @finish_line
+        track.replace(swap(track, old_space, new_space))
+      end
+    end
   end
 
   # Prints the current game board
@@ -40,10 +48,10 @@ class RubyRacer
   # and you should use the "reputs" helper to print over
   # the previous board
   def print_board
-    reputs(track_to_string(@a_track))
-    reputs(track_to_string(@b_track))
-    # p track_to_string(@a_track)
-    # p track_to_string(@b_track)
+    @tracks.each do |track|
+      player = track.compact[0]
+      reputs(track_to_string(track, player))
+    end
   end
 
   private
@@ -51,23 +59,22 @@ class RubyRacer
   # Helper method for advance_player!
   def swap(track, a, b)
     track[a], track[b] = track[b], track[a]
-    return track
+    track
   end
 
-  def track_to_string(track)
+  def track_to_string(track, player)
     track_string = ""
     track.each do |space|
-      track_string += "| a |" if space == "a"
-      track_string += "| b |" if space == "b"
+      track_string += "| #{player} |" if space == player
       track_string += "|   |" if space == nil
     end
     track_string
   end
 end
 
-players = ['a', 'b']
+players = ['a', 'b', 'c', 'd', 'e']
 
-game = RubyRacer.new(players)
+game = RubyRacer.new(players, 15)
 
 # This clears the screen, so the fun can begin
 clear_screen!
@@ -87,6 +94,7 @@ until game.finished?
 end
 
 # The game is over, so we need to print the "winning" board
+system("clear")
 game.print_board
 
 puts "Player '#{game.winner}' has won!"
