@@ -32,7 +32,7 @@ class RubyRacer
     old_space = current_track.index(player)
     new_space = old_space + spaces
     new_space = 29 if new_space > 29
-    swap(current_track, old_space, new_space)
+    current_track = swap(current_track, old_space, new_space)
     @a_track.replace(current_track) if player = "a"
     @b_track.replace(current_track) if player = "b"
   end
@@ -53,6 +53,7 @@ class RubyRacer
   # Helper method for advance_player!
   def swap(track, a, b)
     track[a], track[b] = track[b], track[a]
+    return track
   end
 
   def track_to_string(track)
