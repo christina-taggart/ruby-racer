@@ -33,8 +33,8 @@ class RubyRacer
     new_space = old_space + spaces
     new_space = 29 if new_space > 29
     swap(current_track, old_space, new_space)
-    @a_track = current_track if player = "a"
-    @b_track = current_track if player = "b"
+    @a_track.replace(current_track) if player = "a"
+    @b_track.replace(current_track) if player = "b"
   end
 
   # Prints the current game board
@@ -42,6 +42,10 @@ class RubyRacer
   # and you should use the "reputs" helper to print over
   # the previous board
   def print_board
+    reputs(track_to_string(@a_track))
+    reputs(track_to_string(@b_track))
+    # p track_to_string(@a_track)
+    # p track_to_string(@b_track)
   end
 
   private
@@ -49,6 +53,16 @@ class RubyRacer
   # Helper method for advance_player!
   def swap(track, a, b)
     track[a], track[b] = track[b], track[a]
+  end
+
+  def track_to_string(track)
+    track_string = ""
+    track.each do |space|
+      track_string += "| a |" if space == "a"
+      track_string += "| b |" if space == "b"
+      track_string += "|   |" if space == nil
+    end
+    track_string
   end
 end
 
@@ -67,7 +81,6 @@ until game.finished?
     # We print the board first so we see the initial, starting board
     game.print_board
     game.advance_player!(player)
-
     # We need to sleep a little, otherwise the game will blow right past us.
     # See http://www.ruby-doc.org/core-1.9.3/Kernel.html#method-i-sleep
     sleep(0.5)
@@ -78,3 +91,6 @@ end
 game.print_board
 
 puts "Player '#{game.winner}' has won!"
+
+
+#-----DRIVERS-----
