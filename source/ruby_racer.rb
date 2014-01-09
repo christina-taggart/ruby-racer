@@ -3,31 +3,65 @@ require_relative 'racer_utils'
 class RubyRacer
   attr_reader :players, :length
 
-  def initialize(players, length = 30)
+  def initialize(players, length = 60)
+    @players = Hash[players.map{|p| [p, 0]}]
+    @length = length
+    @die = Die.new
+    @landmine = false
   end
 
   # Returns +true+ if one of the players has reached
   # the finish line, +false+ otherwise
   def finished?
+    @players.values.max >= @length
   end
 
   # Returns the winner if there is one, +nil+ otherwise
   def winner
+    self.finished? ? @players.max_by{ |k, v| v}[0] : nil
   end
 
   # Rolls the dice and advances +player+ accordingly
   def advance_player!(player)
+    @current_player_name = player[0]
+    if landmine_checker(player)
+      @players[player] /= 2
+    else
+      @players[player] += @die.roll
+    end
   end
 
+  def landmine_checker(player)
+    @landmine = false
+    if rand(5) == 3
+      @landmine = true
+      @players[player] /= 2
+    end
+  end
   # Prints the current game board
   # The board should have the same dimensions each time
   # and you should use the "reputs" helper to print over
   # the previous board
   def print_board
+    system("clear")
+    max_name_length = @players.max_by{|k,v| k.length}[0].length
+
+    @players.each do |player|
+      name = player[0]
+      name_offset = max_name_length - name.length
+      player[1] > @length ? car_distance = @length : car_distance = player[1]
+      @length - car_distance >= 0 ? offset = @length - car_distance : offset = 0
+
+      puts <<-eos
+      #{" " * max_name_length}|#{"-" * @length} |
+      #{" " * name_offset}#{name}|#{"=" * car_distance}>#{" " * offset}| #{"LANDMINE!!!" if @landmine && name == @current_player_name}
+      #{" " * max_name_length}|#{"_" * @length} |
+      eos
+    end
   end
 end
 
-players = ['a', 'b']
+players = ['a', 'b', 'alex', 'patrick']
 
 game = RubyRacer.new(players)
 
