@@ -4,19 +4,40 @@ class RubyRacer
   attr_reader :players, :length
 
   def initialize(players, length = 30)
+    @player1 = players.shift
+    @player2 = players.pop
+    @length = length
   end
 
   # Returns +true+ if one of the players has reached
   # the finish line, +false+ otherwise
   def finished?
+    if @player1 == nil
+      @player1 = true
+    elsif @player2 == nil
+      @player2 = true
+    else
+    end
   end
 
   # Returns the winner if there is one, +nil+ otherwise
   def winner
+
   end
 
   # Rolls the dice and advances +player+ accordingly
-  def advance_player!(player)
+  def advance_player1!(player)
+    start = board[0,0]
+    to_move = player.roll
+    board[0,start + to_move] = current_position
+    board[0,current_position+to_move]
+  end
+
+  def advance_player2!(player)
+    start = board[0,0]
+    to_move = player.roll
+    board[1,start + to_move] = current_position
+    board[1,current_position+to_move]
   end
 
   # Prints the current game board
@@ -24,12 +45,14 @@ class RubyRacer
   # and you should use the "reputs" helper to print over
   # the previous board
   def print_board
+    p board = Array.new(2, Array.new(30, "[ ]"))
   end
 end
 
 players = ['a', 'b']
 
 game = RubyRacer.new(players)
+
 
 # This clears the screen, so the fun can begin
 clear_screen!
