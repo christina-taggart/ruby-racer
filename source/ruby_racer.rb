@@ -4,11 +4,18 @@ class RubyRacer
   attr_reader :players, :length
 
   def initialize(players, length = 30)
+    @player_a = players[0]
+    @player_b = players[1]
+    @a_track = Array.new(30)
+    @a_track[0] = @player_a
+    @b_track = Array.new(30)
+    @b_track[0] = @player_b
   end
 
   # Returns +true+ if one of the players has reached
   # the finish line, +false+ otherwise
   def finished?
+    @a_track[29] == "a" || @b_track[29] == "b"
   end
 
   # Returns the winner if there is one, +nil+ otherwise
