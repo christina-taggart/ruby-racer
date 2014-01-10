@@ -100,5 +100,21 @@ game.print_board
 puts "Player '#{game.winner}' has won!"
 
 
+#release 1
+=begin
+  It would be nice to have powerups, such as an apple, which when you land on it will increase the index of
+  the car's position by 2 spaces forward.
+
+  It would be cool to have a banana that moves your car backwards by 3 spaces.
+
+  Add a bomb that will make the game pause for 5 seconds.
+
+  we think that our code is well suited to implementing these features if we need to.  we can create a random powerup
+  generator during game initialization which will scatter powerups randomly throughout the course.  When player's car goes
+  past those squares, then activate the powerup's effects.
+=end
+
+
+
 
 
