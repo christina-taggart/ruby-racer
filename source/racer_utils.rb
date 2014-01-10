@@ -2,7 +2,7 @@ class Die
   def initialize(sides = 6)
     @sides = sides
   end
-  
+
   # Remember: rand(N) randomly returns one of N consecutive integers, starting at 0
   # So rand(N) returns a random integer in (0..N-1)
   # And 1 + rand(N) returns a random integer in (1..N)
@@ -20,7 +20,7 @@ end
 
 # Clear the screen
 def clear_screen!
-  print "\e[2J"
+  print "\e[2J" #system(clear)
 end
 
 # Moves cursor to the top left of the terminal
